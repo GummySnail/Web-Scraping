@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Web.Scraping.Core.Interfaces.Data.Repositories;
 using Web.Scraping.Infrastructure.Data;
+using Web.Scraping.Infrastructure.Data.Repositories;
 using Web.Scraping.Infrastructure.Entities;
+using Web.Scraping.Infrastructure.Mapping;
 
 namespace Web.Scraping.Api.Configuration;
 
@@ -25,6 +28,10 @@ public static class ConfigureInfrastructureServices
             })
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<AppDbContext>();
+
+        services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+
+        services.AddScoped<IUserRepository, UserRepository>();
         
         return services;
     }
