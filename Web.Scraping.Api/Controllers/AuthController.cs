@@ -23,4 +23,18 @@ public class AuthController : BaseApiController
         return Ok(await _userService.RegisterUserAsync(request.UserName, request.Email, request.Password,
             request.ConfirmPassword));
     }
+
+    [HttpPost]
+    [Route(nameof(LoginByEmail))]
+    public async Task<ActionResult<LoginResponseDto>> LoginByEmail(LoginByEmailDto request)
+    {
+        return Ok(await _userService.LoginByEmailAsync(request.Email, request.Password));
+    }
+
+    [HttpPost]
+    [Route(nameof(LoginByUserName))]
+    public async Task<ActionResult<LoginResponseDto>> LoginByUserName(LoginByUserNameDto request)
+    {
+        return Ok(await _userService.LoginByUserNameAsync(request.UserName, request.Password));
+    }
 }

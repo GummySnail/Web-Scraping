@@ -44,4 +44,50 @@ public class UserService : IUserService
             RefreshToken = "Refresh Token"
         };
     }
+
+    public async Task<LoginResponseDto> LoginByEmailAsync(string email, string password)
+    {
+        var user = await _userRepository.GetUserByEmailAsync(email);
+
+        if (user is null)
+        {
+            throw new Exception("User with this email does not exist");
+        }
+
+        if (!await _userRepository.CheckPasswordAsync(user, password))
+        {
+            throw new Exception("Invalid Password");
+        }
+
+        return new LoginResponseDto
+        {
+            Email = user.Email,
+            UserName = user.UserName,
+            AccessToken = "Accesss Token",
+            Refreshtoken = "Refresh Token"
+        };
+    }
+
+    public async Task<LoginResponseDto> LoginByUserNameAsync(string username, string password)
+    {
+        var user = await _userRepository.GetUserByUserNameAsync(username);
+
+        if (user is null)
+        {
+            throw new Exception("User with this username does not exist");
+        }
+
+        if (!await _userRepository.CheckPasswordAsync(user, password))
+        {
+            throw new Exception("Invalid Password");
+        }
+
+        return new LoginResponseDto
+        {
+            Email = user.Email,
+            UserName = user.UserName,
+            AccessToken = "Accesss Token",
+            Refreshtoken = "Refresh Token"
+        };
+    }
 }
