@@ -1,18 +1,23 @@
-using Web.Scraping.Core.Dtos.Request;
+using System.Security.Claims;
 using Web.Scraping.Core.Dtos.Response;
 using Web.Scraping.Core.Entities;
 using Web.Scraping.Core.Interfaces;
 using Web.Scraping.Core.Interfaces.Data.Repositories;
+using Web.Scraping.Core.Interfaces.Services;
 
 namespace Web.Scraping.Core.Services;
 
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly ITokenService _tokenService;
     
-    public UserService(IUserRepository userRepository)
+    public UserService(
+        IUserRepository userRepository,
+        ITokenService tokenService)
     {
         _userRepository = userRepository;
+        _tokenService = tokenService;
     }
     
     public async Task<RegisterResponseDto> RegisterUserAsync(string userName, string email, string password, string confirmPassword)
@@ -36,11 +41,17 @@ public class UserService : IUserService
 
         await _userRepository.CreateUserAsync(user, password);
 
+        var accessToken = _tokenService.GenerateAccessToken(new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Role, "User")
+        });
+
         return new RegisterResponseDto
         {
             Email = user.Email,
             UserName = user.UserName,
-            AccessToken = "access Token",
+            AccessToken = accessToken,
             RefreshToken = "Refresh Token"
         };
     }
@@ -59,11 +70,17 @@ public class UserService : IUserService
             throw new Exception("Invalid Password");
         }
 
+        var accessToken = _tokenService.GenerateAccessToken(new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Role, "User")
+        });
+
         return new LoginResponseDto
         {
             Email = user.Email,
             UserName = user.UserName,
-            AccessToken = "Accesss Token",
+            AccessToken = accessToken,
             Refreshtoken = "Refresh Token"
         };
     }
@@ -82,11 +99,17 @@ public class UserService : IUserService
             throw new Exception("Invalid Password");
         }
 
+        var accessToken = _tokenService.GenerateAccessToken(new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Role, "User")
+        });
+        
         return new LoginResponseDto
         {
             Email = user.Email,
             UserName = user.UserName,
-            AccessToken = "Accesss Token",
+            AccessToken = accessToken,
             Refreshtoken = "Refresh Token"
         };
     }

@@ -1,7 +1,6 @@
-using Web.Scraping.Core.Dtos.Request;
 using Web.Scraping.Core.Dtos.Response;
 
-namespace Web.Scraping.Core.Interfaces;
+namespace Web.Scraping.Core.Interfaces.Services;
 
 public interface IUserService
 {
