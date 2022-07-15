@@ -50,7 +50,8 @@ public static class ConfigureInfrastructureServices
                     ValidAudience = configuration["Jwt:Audience"],
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:TokenKey"])),
-                    ValidateLifetime = true
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 
@@ -63,6 +64,7 @@ public static class ConfigureInfrastructureServices
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
 
         services.AddScoped<ITokenService, TokenService>();
         

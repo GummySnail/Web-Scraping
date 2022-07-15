@@ -10,5 +10,8 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<User, AppUser>();
         CreateMap<AppUser, User>();
+        CreateMap<AppUserRefreshTokens, RefreshToken>()
+            .ForMember(x => x.RefreshTokenValue, opt => opt.MapFrom(x => x.RefreshToken));
+        CreateMap<RefreshToken, AppUserRefreshTokens>();
     }
 }

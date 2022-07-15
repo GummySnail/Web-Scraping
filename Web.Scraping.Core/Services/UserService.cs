@@ -11,13 +11,15 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly ITokenService _tokenService;
-    
+    private readonly IUserRefreshTokenRepository _refreshTokenRepository;
     public UserService(
         IUserRepository userRepository,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        IUserRefreshTokenRepository refreshTokenRepository)
     {
         _userRepository = userRepository;
         _tokenService = tokenService;
+        _refreshTokenRepository = refreshTokenRepository;
     }
     
     public async Task<RegisterResponseDto> RegisterUserAsync(string userName, string email, string password, string confirmPassword)
@@ -47,12 +49,17 @@ public class UserService : IUserService
             new Claim(ClaimTypes.Role, "User")
         });
 
+        var refreshToken = _tokenService.GenerateRefreshToken();
+
+        await _refreshTokenRepository.AddRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddMonths(1));
+        await _refreshTokenRepository.SaveChangesAsync();
+
         return new RegisterResponseDto
         {
             Email = user.Email,
             UserName = user.UserName,
             AccessToken = accessToken,
-            RefreshToken = "Refresh Token"
+            RefreshToken = refreshToken
         };
     }
 
@@ -76,12 +83,17 @@ public class UserService : IUserService
             new Claim(ClaimTypes.Role, "User")
         });
 
+        var refreshToken = _tokenService.GenerateRefreshToken();
+
+        await _refreshTokenRepository.AddRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddMonths(1));
+        await _refreshTokenRepository.SaveChangesAsync();
+
         return new LoginResponseDto
         {
             Email = user.Email,
             UserName = user.UserName,
             AccessToken = accessToken,
-            Refreshtoken = "Refresh Token"
+            Refreshtoken = refreshToken
         };
     }
 
@@ -105,12 +117,17 @@ public class UserService : IUserService
             new Claim(ClaimTypes.Role, "User")
         });
         
+        var refreshToken = _tokenService.GenerateRefreshToken();
+
+        await _refreshTokenRepository.AddRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddMonths(1));
+        await _refreshTokenRepository.SaveChangesAsync();
+        
         return new LoginResponseDto
         {
             Email = user.Email,
             UserName = user.UserName,
             AccessToken = accessToken,
-            Refreshtoken = "Refresh Token"
+            Refreshtoken = refreshToken
         };
     }
 }

@@ -7,6 +7,7 @@ public static class ConfigureCoreServices
     public static IServiceCollection AddCoreServices(this IServiceCollection services)
     {
         services.AddScoped<UserService>();
+        services.AddScoped<TokenService>();
 
         return services;
     }
