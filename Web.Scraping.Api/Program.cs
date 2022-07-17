@@ -12,6 +12,6 @@ builder.Services
 
 var app = builder.Build();
 
-app.AddApplicationConfiguration();
+app.AddApplicationConfiguration(builder.Configuration);
 await app.AddDatabaseConfiguration();
 await app.RunAsync();

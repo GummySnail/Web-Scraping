@@ -7,7 +7,7 @@ namespace Web.Scraping.Api.Configuration;
 
 public static class ConfigureApplication
 {
-    public static WebApplication AddApplicationConfiguration(this WebApplication app)
+    public static WebApplication AddApplicationConfiguration(this WebApplication app, IConfiguration configuration)
     {
         if (app.Environment.IsDevelopment())
         {
@@ -17,6 +17,7 @@ public static class ConfigureApplication
 
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins(configuration["Jwt:Audience"]));
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
