@@ -1,0 +1,18 @@
+<div class="shop">
+<body class="text-center">
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+    <h1 class="h3 mb-3 fw-normal p-lg-5">Please sign in</h1>
+
+    <div class="form-floating py-lg-2">
+      <input type="email" formControlName="email" class="form-control" placeholder="name@example.com">
+    </div>
+
+    <div class="form-floating py-lg-3">
+      <input type="password" formControlName="password" class="form-control" placeholder="Password">
+    </div>
+
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+  </form>
+</body>
+</div>
